@@ -1,3 +1,5 @@
+stark_skywalker_status = "";
+
 avengers = "";
 starWars = "";
 
@@ -8,6 +10,8 @@ rightWristY = 0;
 
 scoreLeftWrist = 0;
 leftWristY_divide_1000 = 0;
+
+scoreRightWrist = 0;
 
 function preload()
 {
@@ -32,16 +36,31 @@ function draw()
     image(video, 0, 0, 600, 500);
 
     avengers_status = avengers.isPlaying();
+    
     fill("FF0000");
     stroke("FF0000");
+    
     if(scoreLeftWrist > 0.2)
     {
-    circle(leftWristX, leftWristY, 20);
-    starWars.stop();
+        circle(leftWristX, leftWristY, 20);
+        starWars.stop();
         if(avengers_status == false)
         {
             avengers.play();
             document.getElementById("song").innerHTML = "Avengers Theme Music";
+        }
+    }
+
+    starWars_status = starWars.isPlaying();
+
+    if(scoreRightWrist > 0.2)
+    {
+        circle(rightWristX, rightWristY, 20);
+        avengers.stop();
+        if(starWars_status == false)
+        {
+            starWars.play();
+            document.getElementById("song").innerHTML = "Star Wars Theme Music";
         }
     }
 }
@@ -56,8 +75,9 @@ function gotPoses(results)
     if(results.length > 0)
     {
         console.log(results);
+        scoreRightWrist = results[0].pose.keypoints[10].score;
         scoreLeftWrist = results[0].pose.keypoints[9].score;
-        console.log("scoreLeftWrist = " + scoreLeftWrist);
+        console.log("scoreLeftWrist = " + scoreLeftWrist + "scoreRightWrist = " + scoreRightWrist);
 
         leftWristX = results[0].pose.leftWrist.x;
         leftWristY = results[0].pose.leftWrist.y;
